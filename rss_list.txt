@@ -1,0 +1,7 @@
+https://www.local10.com/arc/outboundfeeds/rss/category/news/?outputType=xml&size=10
+https://www.local10.com/arc/outboundfeeds/rss/category/entertainment/?outputType=xml&size=10
+http://rss.cnn.com/rss/cnn_topstories.rss
+http://rss.cnn.com/rss/cnn_latest.rss
+http://rss.cnn.com/rss/cnn_showbiz.rss
+http://rss.cnn.com/rss/cnn_latest.rss
+http://rss.cnn.com/rss/cnn_us.rss
