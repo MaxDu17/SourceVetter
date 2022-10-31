@@ -6,7 +6,7 @@ import tqdm
 from Translator import get_keywords
 
 #TODO: SW of hurt
-
+#TODO: their main blog page
 
 class PETA_Media_News_Releases(Translator):
     def __init__(self, relevant_words):

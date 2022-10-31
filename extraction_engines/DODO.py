@@ -38,7 +38,7 @@ class DODO_Daily(Translator):
         return link_dict
 
     def archival_search(self, pages_deep = 2):
-        pass #this requires selenium! 
+        pass #this requires selenium!
 
 if __name__ == "__main__":
     word_list = get_keywords("../keyword.txt")
