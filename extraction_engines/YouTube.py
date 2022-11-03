@@ -14,6 +14,9 @@ class YouTube(Translator):
         self.video_root = "https://www.youtube.com/watch?v="
         super().__init__(relevant_words)
 
+    def grab_comments_from(self, link):
+        pass #TODO
+
     def grab_relevant_links(self):
         page = requests.get(url=self.search_query)
         videos = json.loads(page.text)["items"]

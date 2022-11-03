@@ -23,6 +23,7 @@ while True:
             app_icon=None,
             timeout=10,
         )
+        print("found!")
         with open(f"logs/{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}.txt", "w") as f:
             for url in interest_list:
                 print(url)
@@ -30,7 +31,7 @@ while True:
                 f.write("\n")
     else:
         print("no results found right now! Check back later")
-    time.sleep(7200)
+    time.sleep(3600)
 
 
 
