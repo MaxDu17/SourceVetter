@@ -10,10 +10,11 @@ import tqdm
 # TODO archival sweep
 
 class DODO_Daily(Translator):
-    def __init__(self, relevant_words):
+    def __init__(self, keywords_file):
         self.relevant_prefixes = ["/daily-dodo", "/videos"]  # the links to the pages that matter
         self.url = "https://www.thedodo.com/daily-dodo"
         self.root_url = "https://www.thedodo.com"
+        relevant_words = get_keywords(keywords_file)
         super().__init__(relevant_words)
         # for forward-facing mode, use only the first page
 

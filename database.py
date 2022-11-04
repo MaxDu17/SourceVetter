@@ -5,25 +5,30 @@ import os
 
 # rolling database. Contains the past N elements of interest. This is a redundancy prevention system. Losing this database is not catastrophic
 class Database():
-    def __init__(self, top_n = 100):
+    def __init__(self, top_n = 100, base_dir = "logs/"):
         self.modality_dict = {"news_articles" : OrderedDict(), #link, metadata
                               "twitter_posts": OrderedDict(),
                               "youtube_videos": OrderedDict(),
-                              "instagram_posts": OrderedDict()}
+                              "instagram_posts": OrderedDict(),
+                              "PETA" : OrderedDict(),
+                              "DODO": OrderedDict(),
+                              "DolphinProject": OrderedDict()}
 
-        self.base_dir = "logs/"
+        self.base_dir = base_dir
         self.top_n = top_n
         self.digest = [] #what you missed while you were gone!
 
-    def update(self, items, category):
-        for item in items:
-            assert len(item) == 2
-            if self.in_database(item, category):
+    def update(self, info_dict, category):
+        new_articles = 0 #how many things were added to the database
+        for key, value in info_dict.items():
+            if self.in_database(key, category): #don't add things that we have already seen
                 continue
-            self.modality_dict[category][item[0]] = item[1]
-            self.digest.append(item)
+            new_articles += 1
+            self.modality_dict[category][key] = value
+            self.digest.append((category, key))
             while len(self.modality_dict[category]) > self.top_n: #keeping history somewhat short
                 self.modality_dict[category].popitem(last = False)
+        return new_articles
 
     def get_digest(self):
         return self.digest
@@ -40,6 +45,7 @@ class Database():
 
     # load the contents of the database from a pickle file
     def load_database(self, filename = "database.pkl"):
+        # TODO: if the current modality dict has more keys, add the additional keys as blank ones (allows hot-swapping)
         if os.path.exists(self.base_dir + filename):
             with open(self.base_dir + filename, "rb") as f:
                 self.modality_dict = pickle.load(f)
@@ -47,16 +53,15 @@ class Database():
             print("No database! Making a blank one!")
 
     # check database for the presence of some object
-    def in_database(self, item, category):
-        #item is a tuple (key, metadata)
-        return item[0] in self.modality_dict[category]
+    def in_database(self, key, category):
+        return key in self.modality_dict[category]
 
     def __repr__(self):
         repr_string = "//////////////// DATABASE CONTENTS /////////////// \n"
         for modality in self.modality_dict:
             repr_string += ("------------------- " + modality.upper() + " ------------------- \n")
             for item in self.modality_dict[modality]:
-                repr_string += ("\t Link: " + item + " \t \t Metadata: " + self.modality_dict[modality][item] + "\n")
+                repr_string += ("Link: " + item + " \t \t Metadata: " + self.modality_dict[modality][item] + "\n")
             repr_string += "======================================================= \n"
         return repr_string
 

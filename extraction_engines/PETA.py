@@ -9,10 +9,11 @@ from Translator import get_keywords
 #TODO: their main blog page
 
 class PETA_Media_News_Releases(Translator):
-    def __init__(self, relevant_words):
+    def __init__(self, keywords_file):
         self.relevant_prefix = "https://www.peta.org/media/news-releases/" #the links to the pages that matter
         self.url = "https://www.peta.org/media/news-releases/"
         self.iterable_url_prefix = "https://www.peta.org/media/news-releases/page/"
+        relevant_words = get_keywords(keywords_file)
         super().__init__(relevant_words)
 
     # for forward-facing mode, use only the first page
