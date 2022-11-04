@@ -3,6 +3,7 @@ from plyer import notification
 from datetime import datetime
 import os
 
+# TODO: overhaul database into sql database
 
 import extraction_engines
 
@@ -38,25 +39,33 @@ notification.notify(
 )
 
 
-
 while True:
     if not os.path.exists("logs/DIGEST.txt"): #this is when you have indicated that you are done perusing what is here so far
         answer = input("clear digest? (y/n)")
         if answer == "y":
             master_dataset.clear_digest()
-    with open("logs/DIGEST.txt", "w") as f:
-        f.writelines(master_dataset.get_digest())
 
+    total_items = 0
     for key, reader in source_dict.items():
         if reader is not None:
             url_dict = reader.grab_relevant_links()
             num_new_articles = master_dataset.update(url_dict, key)
             print(f"{num_new_articles} proposed new elements of type {key}")
+            total_items += num_new_articles
+
+    if total_items > 0:
+        notification.notify(
+            title='Current Event Monitor',
+            message=f"This hour, there were {total_items} detected! Check your digest file!",
+            app_icon=None,
+            timeout=10,
+        )
+
+    with open("logs/DIGEST.txt", "w") as f:
+        f.writelines(master_dataset.get_digest())
+
     current_time = time.time()
-    print(f"Next scan scheduled for {datetime.fromtimestamp(current_time + PAUSE)}")
+    print(f"{total_items} found this hour. Next scan scheduled for {datetime.fromtimestamp(current_time + PAUSE)}")
 
     master_dataset.save_database() #dump after every scan just in case we are killed
     time.sleep(PAUSE)
-
-
-

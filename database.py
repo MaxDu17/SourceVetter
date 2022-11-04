@@ -34,7 +34,8 @@ class Database():
         return self.digest_repr()
 
     def clear_digest(self):
-        self.digest.clear()
+        for value in self.digest.values():
+            value.clear() #clear each ordered dictionary
 
     # saves the contents of the database to a pickle file and text file for easy reading
     def save_database(self):
@@ -47,6 +48,7 @@ class Database():
     def load_database(self, filename = "database.pkl"):
         # TODO: if the current modality dict has more keys, add the additional keys as blank ones (allows hot-swapping)
         if os.path.exists(self.base_dir + filename):
+            print(f"Loaded database at {self.base_dir + filename}")
             with open(self.base_dir + filename, "rb") as f:
                 self.modality_dict, self.digest = pickle.load(f)
         else:
