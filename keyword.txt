@@ -5,5 +5,3 @@ seaquarium
 aquarium
 dolphin
 whale
-pandemic
-

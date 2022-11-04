@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
-from Translator import Translator
+from extraction_engines.Translator import Translator
 import time
 import tqdm
-from Translator import get_keywords
+from extraction_engines.Translator import get_keywords
 
 #TODO: SW of hurt
 #TODO: their main blog page
@@ -31,7 +31,7 @@ class PETA_Media_News_Releases(Translator):
             if url is not None and self.relevant_prefix in url:
                 for word in self.relevant_words:
                     if title is not None and word in title:
-                        link_dict[title] = url
+                        link_dict[url] = title
                         break
         return link_dict
 

@@ -30,7 +30,7 @@ class YouTube(Translator):
             title = video["snippet"]["title"].lower()
             for word in self.relevant_words:
                 if title is not None and word in title:
-                    link_dict[title] = self.video_root + video_id
+                    link_dict[self.video_root + video_id] = title
         return link_dict
 
 

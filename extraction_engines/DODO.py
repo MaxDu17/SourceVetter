@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
-from Translator import Translator
-from Translator import get_keywords
+from extraction_engines.Translator import Translator
+from extraction_engines.Translator import get_keywords
 
 import time
 import tqdm
@@ -33,7 +33,7 @@ class DODO_Daily(Translator):
                 if url is not None and url.startswith(prefix):
                     for word in self.relevant_words:
                         if title is not None and word in title:
-                            link_dict[title] = self.root_url + url
+                            link_dict[self.root_url + url] = ''.join(e for e in title if e.isalnum() or e == " ") #stripping special characters
                             break
                     break
         return link_dict

@@ -1,6 +1,6 @@
 import feedparser
-from Translator import Translator
-from Translator import get_keywords
+from extraction_engines.Translator import Translator
+from extraction_engines.Translator import get_keywords
 
 class RSSReader(Translator):
     def __init__(self, keywords_file, rss_file):
@@ -45,4 +45,3 @@ class RSSReader(Translator):
 if __name__ == "__main__":
     reader = RSSReader("../keyword.txt", "../rss_list.txt")
     print(reader.grab_relevant_links())
-    # print(scan_rss("rss_list.txt", "keyword.txt"))
