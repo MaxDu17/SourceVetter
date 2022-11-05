@@ -1,6 +1,7 @@
 import feedparser
 from extraction_engines.Translator import Translator
 from extraction_engines.Translator import get_keywords
+import tqdm
 
 class RSSReader(Translator):
     def __init__(self, keywords_file, rss_file):
@@ -36,8 +37,7 @@ class RSSReader(Translator):
 
     def grab_relevant_links(self):
         url_master_dict = {}
-        for url in self.rss_links:
-            print(url)
+        for url in tqdm.tqdm(self.rss_links):
             feed_list = self.extract_rss(url)
             urls_dict = self.find_matches(self.relevant_words, feed_list)
             if len(urls_dict) > 0:
