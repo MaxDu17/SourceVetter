@@ -19,6 +19,7 @@ class RSSReader(Translator):
     def extract_rss(self, url):
         # returns list of newsfeed dict entries from the rss feed
         NewsFeed = feedparser.parse(url)
+
         return NewsFeed.entries
 
     def find_matches(self, keyword_list, feed_list):
@@ -36,6 +37,7 @@ class RSSReader(Translator):
     def grab_relevant_links(self):
         url_master_dict = {}
         for url in self.rss_links:
+            print(url)
             feed_list = self.extract_rss(url)
             urls_dict = self.find_matches(self.relevant_words, feed_list)
             if len(urls_dict) > 0:
