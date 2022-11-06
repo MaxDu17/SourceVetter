@@ -22,6 +22,9 @@ RSS_Reader = RSSReader("keyword.txt", "rss_list.txt")
 PETA_Reader = PETA_Media_News_Releases("keyword.txt")
 DODO_Reader = DODO_Daily("keyword.txt")
 YouTube_Reader = YouTubeChannelSweep("keyword.txt", "youtube.txt")
+
+#TODO: create augmenting keywords for every RSS reader
+
 # YouTube_Reader = YouTubeChannelSweep("channels.txt")
 
 source_dict = { "news_articles" : RSS_Reader, #link, metadata

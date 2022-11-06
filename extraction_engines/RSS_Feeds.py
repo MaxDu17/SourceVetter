@@ -31,6 +31,7 @@ class RSSReader(Translator):
             summary = feed["summary"].lower() if "summary" in feed else ""
             for keyword in keyword_list:
                 if keyword in title or keyword in summary:
+                    print(f"found: {keyword}")
                     url_dict[feed["link"]] = title
                     break
         return url_dict
