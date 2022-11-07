@@ -2,12 +2,15 @@ from collections import OrderedDict
 import pickle
 import os
 import copy
+import time
+from datetime import datetime
 
 import sqlite3
 
 class SQLDatabase():
     def __init__(self, database_name):
         self.connection = sqlite3.connect(database_name)
+        self.cursor = self.connection.cursor()
         self.modalities = ["news_articles" , #link, metadata
                               "twitter_posts",
                               "youtube_videos",
@@ -16,29 +19,44 @@ class SQLDatabase():
                               "DODO",
                               "DolphinProject"]
 
-        self.reconstruct_entire_database()
+        self.maybe_reconstruct_database()
 
-    def reconstruct_entire_database(self):
-        cursor = self.connection.cursor()
-
-        cursor.execute("CREATE TABLE IF NOT EXISTS news_articles (url TEXT PRIMARY KEY, title TEXT, date_inserted INTEGER, digested INTEGER)")
-        # cursor.execute("INSERT INTO news_articles VALUES ('www.youtube.com', 'test', 1123154, 1)")
-        # cursor.execute("INSERT INTO news_articles VALUES ('www.facebook.com', 'test2', 2123154, 0)")
-        # cursor.execute("INSERT INTO news_articles VALUES ('www.instagram.com', 'test3', 3123154, 0)")
+    def maybe_reconstruct_database(self):
+        for modality in self.modalities:
+            self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {modality} (url TEXT PRIMARY KEY, title TEXT, date_inserted INTEGER, digested INTEGER)")
         self.connection.commit()
 
+    def update(self, info_dict, category):
+        # requirements: info dict to contain key as URL, value as plaintext information
+        for url, text in info_dict.items():
+            counts = self.cursor.execute(f"SELECT COUNT(1) FROM {category} WHERE url = '{url}'").fetchall()
+            if counts[0][0] == 0:
+                self.cursor.execute(f"INSERT INTO {category} VALUES ('{url}', '{text}', {int(time.time())}, 0)")
+        self.connection.commit()
 
-        rows = cursor.execute("SELECT url, digested FROM news_articles").fetchall()
-        rows = cursor.execute("SELECT url, title, date_inserted FROM news_articles WHERE digested = 1").fetchall()
-        rows = cursor.execute("UPDATE news_articles SET digested = 1 WHERE url = 'wwddw.youtube.com'").fetchall()
-        print(rows)
+    def get_digest(self):
+        undigested_list = list()
+        for modality in self.modalities:
+            undigested_list.extend(self.cursor.execute(f"SELECT * FROM {modality} WHERE digested = 0").fetchall())
+        return undigested_list
 
-        rows = cursor.execute("SELECT COUNT(1) FROM news_articles WHERE digested = 0").fetchall()
+    def clear_digest(self, modality = None, key = None):
+        if modality and key is not None:
+            self.cursor.execute(f"UPDATE {modality} SET digested = 1 WHERE url = '{key}'")
+        else:
+            for modality in self.modalities: #mass clearing
+                self.cursor.execute(f"UPDATE {modality} SET digested = 1")
 
-        output = cursor.execute("SELECT * FROM news_articles").fetchall()
-        print(output)
-        print(rows)
-        self.connection.close()
+    def __repr__(self):
+        repr_string = "//////////////// DATABASE CONTENTS /////////////// \n"
+        for modality in self.modalities:
+            repr_string += ("------------------- " + modality.upper() + " ------------------- \n")
+            items = self.cursor.execute(f"SELECT * FROM {modality} ORDER BY digested DESC, date_inserted DESC").fetchall()
+            for item in items:
+                pretty_date = datetime.fromtimestamp(item[2])
+                repr_string += f"Time Inserted: {pretty_date} \t Digested: {item[3] == 1} \t Link: {item[0]} \t \t Metadata: {item[1]}\n"
+            repr_string += "======================================================= \n"
+        return repr_string
 
 # rolling database. Contains the past N elements of interest. This is a redundancy prevention system. Losing this database is not catastrophic
 class Database():
@@ -116,9 +134,8 @@ class Database():
 
 if __name__ == "__main__":
     d = SQLDatabase("test.db")
-    quit()
     # some simple tests to check functionality
-    d = Database(5)
+    # d = Database(5)
 
     items = {
         "test1.com": "metadata 1",
@@ -127,6 +144,7 @@ if __name__ == "__main__":
         "test4.com": "metadata 4",
     }
     d.update(items, "news_articles")
+    print(d)
     print(d.get_digest()) #to show the user interface
 
 
@@ -136,7 +154,7 @@ if __name__ == "__main__":
        "test7.com": "metadata 7",
        "test8.com": "metadata 8",
     }
-    d.update(items, "news_articles") #show that we can wrap around
+    d.update(items, "news_articles")
 
     non_distinct_items = {
         "test5.com": "metadata 5",
@@ -145,12 +163,5 @@ if __name__ == "__main__":
 
     d.update(non_distinct_items, "news_articles")
     print(d.get_digest()) #to show the user interface
-    d.save_database()
     print(d)
-
-    # show that we can reload the database
-    e = Database(5)
-    e.load_database()
-    # print(e)
-
 
