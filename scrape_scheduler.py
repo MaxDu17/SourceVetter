@@ -7,7 +7,7 @@ import os
 
 import extraction_engines
 
-from database import Database
+from database import SQLDatabase
 from extraction_engines.RSS_Feeds import RSSReader
 from extraction_engines.DODO import DODO_Daily
 from extraction_engines.PETA import PETA_Media_News_Releases
@@ -16,8 +16,7 @@ from extraction_engines.DolphinProject import DolphinProject
 
 PAUSE = 3600
 
-master_dataset = Database(50)
-master_dataset.load_database() #load from what we had
+master_dataset = SQLDatabase("logs/database.db") # Database(50)
 
 RSS_Reader = RSSReader("keyword.txt", "rss_list.txt")
 PETA_Reader = PETA_Media_News_Releases("keyword.txt")
@@ -26,9 +25,6 @@ YouTube_Reader = YouTubeChannelSweep("keyword.txt", "youtube.txt")
 DP_Reader = DolphinProject("keyword.txt")
 
 #TODO: create augmenting keywords for every RSS reader
-
-# YouTube_Reader = YouTubeChannelSweep("channels.txt")
-
 source_dict = { "news_articles" : RSS_Reader, #link, metadata
                               "twitter_posts": None,
                               "youtube_videos": YouTube_Reader,
@@ -58,11 +54,6 @@ if answer == "y":
     # master_dataset.clear_digest()
 
 while True:
-    if not os.path.exists("logs/DIGEST.txt"): #this is when you have indicated that you are done perusing what is here so far
-        # answer = input("clear digest? (y/n)")
-        # if answer == "y":
-        master_dataset.clear_digest()
-
     total_items = 0
     for key, reader in source_dict.items():
         if reader is not None:
@@ -79,11 +70,7 @@ while True:
             timeout=10,
         )
 
-    with open("logs/DIGEST.txt", "w") as f:
-        f.writelines(master_dataset.get_digest())
-
     current_time = time.time()
     print(f"{total_items} found this hour. Next scan scheduled for {datetime.fromtimestamp(current_time + PAUSE)}")
 
-    master_dataset.save_database() #dump after every scan just in case we are killed
     time.sleep(PAUSE)
