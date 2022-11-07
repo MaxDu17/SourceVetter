@@ -3,8 +3,42 @@ import pickle
 import os
 import copy
 
-# class SQLDatabase():
+import sqlite3
 
+class SQLDatabase():
+    def __init__(self, database_name):
+        self.connection = sqlite3.connect(database_name)
+        self.modalities = ["news_articles" , #link, metadata
+                              "twitter_posts",
+                              "youtube_videos",
+                              "instagram_posts",
+                              "PETA" ,
+                              "DODO",
+                              "DolphinProject"]
+
+        self.reconstruct_entire_database()
+
+    def reconstruct_entire_database(self):
+        cursor = self.connection.cursor()
+
+        cursor.execute("CREATE TABLE IF NOT EXISTS news_articles (url TEXT PRIMARY KEY, title TEXT, date_inserted INTEGER, digested INTEGER)")
+        # cursor.execute("INSERT INTO news_articles VALUES ('www.youtube.com', 'test', 1123154, 1)")
+        # cursor.execute("INSERT INTO news_articles VALUES ('www.facebook.com', 'test2', 2123154, 0)")
+        # cursor.execute("INSERT INTO news_articles VALUES ('www.instagram.com', 'test3', 3123154, 0)")
+        self.connection.commit()
+
+
+        rows = cursor.execute("SELECT url, digested FROM news_articles").fetchall()
+        rows = cursor.execute("SELECT url, title, date_inserted FROM news_articles WHERE digested = 1").fetchall()
+        rows = cursor.execute("UPDATE news_articles SET digested = 1 WHERE url = 'wwddw.youtube.com'").fetchall()
+        print(rows)
+
+        rows = cursor.execute("SELECT COUNT(1) FROM news_articles WHERE digested = 0").fetchall()
+
+        output = cursor.execute("SELECT * FROM news_articles").fetchall()
+        print(output)
+        print(rows)
+        self.connection.close()
 
 # rolling database. Contains the past N elements of interest. This is a redundancy prevention system. Losing this database is not catastrophic
 class Database():
@@ -81,6 +115,8 @@ class Database():
         return repr_string
 
 if __name__ == "__main__":
+    d = SQLDatabase("test.db")
+    quit()
     # some simple tests to check functionality
     d = Database(5)
 
