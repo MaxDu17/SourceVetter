@@ -3,6 +3,9 @@ import pickle
 import os
 import copy
 
+# class SQLDatabase():
+
+
 # rolling database. Contains the past N elements of interest. This is a redundancy prevention system. Losing this database is not catastrophic
 class Database():
     def __init__(self, top_n = 100, base_dir = "logs/"):

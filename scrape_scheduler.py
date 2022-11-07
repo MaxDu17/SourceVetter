@@ -12,6 +12,7 @@ from extraction_engines.RSS_Feeds import RSSReader
 from extraction_engines.DODO import DODO_Daily
 from extraction_engines.PETA import PETA_Media_News_Releases
 from extraction_engines.YouTube import YouTubeChannelSweep
+from extraction_engines.DolphinProject import DolphinProject
 
 PAUSE = 3600
 
@@ -22,6 +23,7 @@ RSS_Reader = RSSReader("keyword.txt", "rss_list.txt")
 PETA_Reader = PETA_Media_News_Releases("keyword.txt")
 DODO_Reader = DODO_Daily("keyword.txt")
 YouTube_Reader = YouTubeChannelSweep("keyword.txt", "youtube.txt")
+DP_Reader = DolphinProject("keyword.txt")
 
 #TODO: create augmenting keywords for every RSS reader
 
@@ -33,7 +35,7 @@ source_dict = { "news_articles" : RSS_Reader, #link, metadata
                               "instagram_posts": None,
                               "PETA" : PETA_Reader ,
                               "DODO": DODO_Reader,
-                              "DolphinProject": None}
+                              "DolphinProject": DP_Reader}
 
 notification.notify(
     title = 'Current Event Monitor',

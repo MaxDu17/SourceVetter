@@ -1,3 +1,4 @@
+https://chaski.huffpost.com/us/auto
 https://www.local10.com/arc/outboundfeeds/rss/category/news/?outputType=xml&size=10
 https://www.local10.com/arc/outboundfeeds/rss/category/entertainment/?outputType=xml&size=10
 https://www.latimes.com/california/rss2.0.xml
