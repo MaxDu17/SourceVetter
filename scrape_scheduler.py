@@ -3,8 +3,6 @@ from plyer import notification
 from datetime import datetime
 import os
 
-# TODO: overhaul database into sql database
-
 import extraction_engines
 
 from database import SQLDatabase
@@ -42,6 +40,7 @@ notification.notify(
 
 answer = input("do you want burn-in round?") #for the filterless engines (like some YouTube channels), we get a
 # large influx of data to begin with, some of which is old data. When we burn-in, we accept that everything is old and clear the digest
+# TODO make this better
 num_ignored = 0
 if answer == "y":
     for key, reader in source_dict.items():

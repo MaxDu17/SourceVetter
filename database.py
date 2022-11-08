@@ -39,10 +39,10 @@ class SQLDatabase():
         return new_element_count
 
     def get_digest(self):
-        undigested_list = list()
+        undigested_dict = {}
         for modality in self.modalities:
-            undigested_list.extend(self.cursor.execute(f"SELECT * FROM {modality} WHERE digested = 0").fetchall())
-        return undigested_list
+            undigested_dict[modality] = self.cursor.execute(f"SELECT * FROM {modality} WHERE digested = 0").fetchall()
+        return undigested_dict
 
     def clear_digest(self, modality = None, key = None):
         if modality and key is not None:
@@ -50,6 +50,7 @@ class SQLDatabase():
         else:
             for modality in self.modalities: #mass clearing
                 self.cursor.execute(f"UPDATE {modality} SET digested = 1")
+        self.connection.commit()
 
     def __repr__(self):
         repr_string = "//////////////// DATABASE CONTENTS /////////////// \n"
@@ -76,8 +77,6 @@ class SQLDatabase():
 
 if __name__ == "__main__":
     d = SQLDatabase("test.db")
-    # some simple tests to check functionality
-    # d = Database(5)
 
     items = {
         "test1.com": "metadata 1",
@@ -107,5 +106,3 @@ if __name__ == "__main__":
     print(d)
     print(d.get_digest()) #to show the user interface
     print(d.digest_repr())
-
-
