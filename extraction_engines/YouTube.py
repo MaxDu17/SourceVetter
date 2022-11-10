@@ -2,6 +2,7 @@ import requests
 import json
 from extraction_engines.Translator import Translator
 from extraction_engines.Translator import get_keywords
+import tqdm
 
 with open("secrets/youtube_api.txt") as f:
     API_KEY = f.readline().strip("\n")
@@ -30,7 +31,7 @@ class YouTubeChannelSweep(Translator):
 
     def grab_relevant_links(self):
         link_dict = {}
-        for channel_id, filter_state in zip(self.channel_id, self.filter_states):
+        for channel_id, filter_state in tqdm.tqdm(zip(self.channel_id, self.filter_states)):
             # print(channel_id)
             search_query = f"https://www.googleapis.com/youtube/v3/search?key={API_KEY}&channelId={channel_id}&part=snippet,id&order=date&maxResults={self.max_results}"
             page = requests.get(url=search_query)

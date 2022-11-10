@@ -33,7 +33,11 @@ class SQLDatabase():
         for url, text in info_dict.items():
             counts = self.cursor.execute(f"SELECT COUNT(1) FROM {category} WHERE url = '{url}'").fetchall()
             if counts[0][0] == 0:
-                self.cursor.execute(f"INSERT INTO {category} VALUES ('{url}', '{text}', {int(time.time())}, 0)")
+                try:
+                    text = text.replace("'", "&quot")
+                    self.cursor.execute(f"INSERT INTO {category} VALUES ('{url}', '{text}', {int(time.time())}, 0)")
+                except:
+                    print("Error prevented the logging of", category, url, text)
                 new_element_count += 1
         self.connection.commit()
         return new_element_count

@@ -13,6 +13,7 @@ from extraction_engines.YouTube import YouTubeChannelSweep
 from extraction_engines.DolphinProject import DolphinProject
 
 PAUSE = 3600
+YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
 
 master_dataset = SQLDatabase("logs/database.db") # Database(50)
 
@@ -38,23 +39,13 @@ notification.notify(
     timeout = 10,
 )
 
-answer = input("do you want burn-in round?") #for the filterless engines (like some YouTube channels), we get a
-# large influx of data to begin with, some of which is old data. When we burn-in, we accept that everything is old and clear the digest
-# TODO make this better
-num_ignored = 0
-if answer == "y":
-    for key, reader in source_dict.items():
-        if reader is not None:
-            print(key)
-            url_dict = reader.grab_relevant_links()
-            num_new_articles = master_dataset.update(url_dict, key)
-            num_ignored += num_new_articles
-    print(f"Ignored {num_ignored} articles.")
-    # master_dataset.clear_digest()
-
+count = 0
 while True:
     total_items = 0
     for key, reader in source_dict.items():
+        if key == "youtube_videos" and count % YOUTUBE_SKIP != 0: #prevents hitting the quota
+            continue
+
         if reader is not None:
             url_dict = reader.grab_relevant_links()
             num_new_articles = master_dataset.update(url_dict, key)
@@ -64,7 +55,7 @@ while True:
     if total_items > 0:
         notification.notify(
             title='Current Event Monitor',
-            message=f"This hour, there were {total_items} detected! Check your digest file!",
+            message=f"This hour, there were {total_items} detected! Run the digest reader for more info.",
             app_icon=None,
             timeout=10,
         )
@@ -73,3 +64,4 @@ while True:
     print(f"{total_items} found this hour. Next scan scheduled for {datetime.fromtimestamp(current_time + PAUSE)}")
 
     time.sleep(PAUSE)
+    count += 1

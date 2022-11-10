@@ -26,23 +26,27 @@ class RSSReader(Translator):
     def find_matches(self, keyword_list, feed_list):
         # returns a dict of URLs + titles when matching
         url_dict = {}
+        keywords_found = set()
         for feed in feed_list:
             title = feed["title"].lower()
             summary = feed["summary"].lower() if "summary" in feed else ""
             for keyword in keyword_list:
                 if keyword in title or keyword in summary:
-                    print(f"found: {keyword}")
+                    keywords_found.add(keyword)
                     url_dict[feed["link"]] = title
                     break
-        return url_dict
+        return url_dict, keywords_found
 
     def grab_relevant_links(self):
         url_master_dict = {}
+        keywords_found = set()
         for url in tqdm.tqdm(self.rss_links):
             feed_list = self.extract_rss(url)
-            urls_dict = self.find_matches(self.relevant_words, feed_list)
+            urls_dict, keywords = self.find_matches(self.relevant_words, feed_list)
             if len(urls_dict) > 0:
                 url_master_dict.update(urls_dict) #if there is a duplicate key, overwrite with current, and that's ok
+            keywords_found.update(keywords)
+        print(f"Keywords_found: {keywords_found}")
         return url_master_dict
 
 if __name__ == "__main__":
