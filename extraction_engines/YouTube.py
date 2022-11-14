@@ -99,6 +99,6 @@ if __name__ == "__main__":
     # youtube_channel = YouTube(["tesla"], "https://www.youtube.com/channel/UC2nhCnIGssNalfnHgcaglBQ")
     # print(youtube_channel.grab_relevant_links())
     # quit()
-    yt = YouTubeChannelSweep("../keyword.txt", "../youtube.txt")
+    yt = YouTubeChannelSweep("../streams/keyword.txt", "../streams/youtube.txt")
     print(yt.grab_relevant_links())
 

@@ -1,0 +1,4 @@
+http://export.arxiv.org/rss/cs.AI
+http://export.arxiv.org/rss/cs.CV/
+http://export.arxiv.org/rss/cs.LG/
+http://export.arxiv.org/rss/cs.RO/

@@ -42,7 +42,7 @@ class DolphinProject(Translator):
 
 
 if __name__ == "__main__":
-    DP_trans = DolphinProject("../keyword.txt")
+    DP_trans = DolphinProject("../streams/keyword.txt")
     print(DP_trans.grab_relevant_links())
     # print(DP_trans.iterate_through_database(10))
     quit()

@@ -50,5 +50,6 @@ class RSSReader(Translator):
         return url_master_dict
 
 if __name__ == "__main__":
-    reader = RSSReader("../keyword.txt", "../rss_list.txt")
+    # reader = RSSReader("../streams/keyword.txt", "../streams/rss_list.txt")
+    reader = RSSReader("../streams/keyword_CS.txt", "../streams/rss_list_CS.txt")
     print(reader.grab_relevant_links())

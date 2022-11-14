@@ -15,22 +15,22 @@ from extraction_engines.DolphinProject import DolphinProject
 PAUSE = 3600
 YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
 
-master_dataset = SQLDatabase("logs/database.db") # Database(50)
+CS_RSS_Reader = RSSReader("streams/keyword_CS.txt", "streams/rss_list_CS.txt")
+RSS_Reader = RSSReader("streams/keyword.txt", "streams/rss_list.txt")
 
-RSS_Reader = RSSReader("keyword.txt", "rss_list.txt")
-PETA_Reader = PETA_Media_News_Releases("keyword.txt")
-DODO_Reader = DODO_Daily("keyword.txt")
-YouTube_Reader = YouTubeChannelSweep("keyword.txt", "youtube.txt")
-DP_Reader = DolphinProject("keyword.txt")
+PETA_Reader = PETA_Media_News_Releases("streams/keyword.txt")
+DODO_Reader = DODO_Daily("streams/keyword.txt")
+YouTube_Reader = YouTubeChannelSweep("streams/keyword.txt", "streams/youtube.txt")
+DP_Reader = DolphinProject("streams/keyword.txt")
 
-#TODO: create augmenting keywords for every RSS reader
-source_dict = { "news_articles" : RSS_Reader, #link, metadata
-                              "twitter_posts": None,
+source_dict = {"news_articles" : RSS_Reader, "cs_arxiv" : CS_RSS_Reader,
                               "youtube_videos": YouTube_Reader,
-                              "instagram_posts": None,
                               "PETA" : PETA_Reader ,
                               "DODO": DODO_Reader,
                               "DolphinProject": DP_Reader}
+
+master_dataset = SQLDatabase("logs/database.db", tables = source_dict.keys()) # Database(50)
+
 
 notification.notify(
     title = 'Current Event Monitor',

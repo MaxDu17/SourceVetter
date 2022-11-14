@@ -8,24 +8,41 @@ from datetime import datetime
 import sqlite3
 
 class SQLDatabase():
-    def __init__(self, database_name):
+    def __init__(self, database_name, tables = None):
         self.connection = sqlite3.connect(database_name)
         self.cursor = self.connection.cursor()
-        self.modalities = ["news_articles" , #link, metadata
-                              "twitter_posts",
-                              "youtube_videos",
-                              "instagram_posts",
-                              "PETA" ,
-                              "DODO",
-                              "DolphinProject"]
+        if tables is not None:
+            self.modalities = tables
+        else:
+            names = self.cursor.execute("SELECT NAME FROM SQLITE_MASTER WHERE TYPE='table'").fetchall()
+            self.modalities = [k[0] for k in names]
 
-        self.maybe_reconstruct_database()
+        self.maybe_reconstruct_database() #create tables only if they don't exist. Don't discard tables ever.
 
     def maybe_reconstruct_database(self):
         # should be robust to any new modalities added
         for modality in self.modalities:
             self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {modality} (url TEXT PRIMARY KEY, title TEXT, date_inserted INTEGER, digested INTEGER)")
         self.connection.commit()
+
+    def drop_other_than(self, modality_list): #housekeeping to remove tables that you don't need anymore
+        names = self.cursor.execute("SELECT NAME FROM SQLITE_MASTER WHERE TYPE='table'").fetchall()
+        current_tables = [k[0] for k in names]
+        to_remove = [k for k in current_tables if k not in modality_list]
+        answer = input(f"You will be removing {to_remove}. Are you sure? (y/n)")
+        if answer == "y":
+            for table in to_remove:
+                self.cursor.execute(f"DROP TABLE {table}")
+        else:
+            print("Removal aborted!")
+        self.connection.commit()
+
+    def get_stats(self):
+        return_string = "DATABASE STATS \n"
+        for table in self.modalities:
+            count = self.cursor.execute(f"SELECT COUNT(1) FROM {table}").fetchall()
+            return_string += f"\t{table}: {count[0][0]}\n"
+        return return_string
 
     def update(self, info_dict, category):
         # requirements: info dict to contain key as URL, value as plaintext information

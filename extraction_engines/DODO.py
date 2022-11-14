@@ -42,7 +42,7 @@ class DODO_Daily(Translator):
         pass #this requires selenium!
 
 if __name__ == "__main__":
-    word_list = get_keywords("../keyword.txt")
+    word_list = get_keywords("../streams/keyword.txt")
     dodo_trans = DODO_Daily(word_list)
     print(dodo_trans.grab_relevant_links())
     quit()
