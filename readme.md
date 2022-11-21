@@ -11,6 +11,7 @@ I find this information gathering process rather tedious, so I made this web scr
 This is an ongoing project and it will get more complicated as I work on it. Right now, it can extract keyword-bearing articles from...
 * Any RSS news feed 
 * Any YouTube channel
+* Any Twitter user 
 * Specialty sites Dolphin Project, PETA, The Dodo, ThemeParkInsider, New Yorker Fiction, Non Human Rights project, Inside The Magic 
 
 # Setting things up
