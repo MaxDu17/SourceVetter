@@ -13,6 +13,8 @@ from extraction_engines.YouTube import YouTubeChannelSweep
 from extraction_engines.DolphinProject import DolphinProject
 from extraction_engines.NewYorkerFiction import NewYorkerFiction
 from extraction_engines.BehindTheThrills import BehindThrills
+from extraction_engines.Twitter import TwitterSweep
+from extraction_engines.NonHumanRights import NonHumanRightsBlog
 
 PAUSE = 3600
 YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
@@ -20,24 +22,30 @@ YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
 CS_RSS_Reader = RSSReader("streams/keyword_CS.txt", "streams/rss_list_CS.txt")
 RSS_Reader = RSSReader("streams/keyword.txt", "streams/rss_list.txt")
 
+YouTube_Reader = YouTubeChannelSweep("streams/keyword.txt", "streams/youtube.txt")
+Twitter_Reader = TwitterSweep("streams/keyword.txt", "streams/twitter.txt")
+
+# special interest
 PETA_Reader = PETA_Media_News_Releases("streams/keyword.txt")
 DODO_Reader = DODO_Daily("streams/keyword.txt")
-YouTube_Reader = YouTubeChannelSweep("streams/keyword.txt", "streams/youtube.txt")
-DP_Reader = DolphinProject("streams/keyword.txt")
+DP_Reader = DolphinProject() # don't include a keyword file to get all results
 NewYorkerFiction_Reader = NewYorkerFiction()
 BehindThrills_Reader = BehindThrills("streams/keyword.txt")
+NonHumanRights_Reader = NonHumanRightsBlog() # don't include a keyword file to get all results
+
 
 source_dict = {"news_articles" : RSS_Reader, "cs_arxiv" : CS_RSS_Reader,
                               "youtube_videos": YouTube_Reader,
+                              "twitter": Twitter_Reader,
                               "PETA" : PETA_Reader ,
                               "DODO": DODO_Reader,
                               "DolphinProject": DP_Reader,
                               "New_Yorker_Fiction": NewYorkerFiction_Reader,
-                              "Behind_Thrills" : BehindThrills_Reader
+                              "Behind_Thrills" : BehindThrills_Reader,
+                              "Non_Human_Rights" : NonHumanRights_Reader
             }
 
 master_dataset = SQLDatabase("logs/database.db", tables = source_dict.keys()) # Database(50)
-
 
 notification.notify(
     title = 'Current Event Monitor',

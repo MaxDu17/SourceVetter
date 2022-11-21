@@ -47,8 +47,7 @@ class PETA_Media_News_Releases(Translator):
 
 
 if __name__ == "__main__":
-    word_list = get_keywords("../streams/keyword.txt")
-    PETA_trans = PETA_Media_News_Releases(word_list)
+    PETA_trans = PETA_Media_News_Releases("../streams/keyword.txt")
     # print(PETA_trans.grab_relevant_links())
     print(PETA_trans.iterate_through_database(10))
     quit()

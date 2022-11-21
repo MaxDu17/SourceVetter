@@ -5,8 +5,9 @@ from extraction_engines.Translator import get_keywords
 import tqdm
 
 # https://developer.twitter.com/apitools/api?endpoint=%2F2%2Fusers%2F%7Bid%7D%2Ftweets&method=get
+# https://tweeterid.com/
 
-with open("../secrets/twitter_api.txt") as f:
+with open("secrets/twitter_api.txt") as f:
     bearer_token = f.readlines()[-1] #stored as the last line in my api text file
 
 
