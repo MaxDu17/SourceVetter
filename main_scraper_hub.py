@@ -12,6 +12,7 @@ from extraction_engines.PETA import PETA_Media_News_Releases
 from extraction_engines.YouTube import YouTubeChannelSweep
 from extraction_engines.DolphinProject import DolphinProject
 from extraction_engines.NewYorkerFiction import NewYorkerFiction
+from extraction_engines.BehindTheThrills import BehindThrills
 
 PAUSE = 3600
 YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
@@ -23,14 +24,17 @@ PETA_Reader = PETA_Media_News_Releases("streams/keyword.txt")
 DODO_Reader = DODO_Daily("streams/keyword.txt")
 YouTube_Reader = YouTubeChannelSweep("streams/keyword.txt", "streams/youtube.txt")
 DP_Reader = DolphinProject("streams/keyword.txt")
-NewYorkerFictionReader = NewYorkerFiction()
+NewYorkerFiction_Reader = NewYorkerFiction()
+BehindThrills_Reader = BehindThrills("streams/keyword.txt")
 
 source_dict = {"news_articles" : RSS_Reader, "cs_arxiv" : CS_RSS_Reader,
                               "youtube_videos": YouTube_Reader,
                               "PETA" : PETA_Reader ,
                               "DODO": DODO_Reader,
                               "DolphinProject": DP_Reader,
-                              "New_Yorker_Fiction": NewYorkerFictionReader}
+                              "New_Yorker_Fiction": NewYorkerFiction_Reader,
+                              "Behind_Thrills" : BehindThrills_Reader
+            }
 
 master_dataset = SQLDatabase("logs/database.db", tables = source_dict.keys()) # Database(50)
 

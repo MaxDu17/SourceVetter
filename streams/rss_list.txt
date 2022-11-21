@@ -1,6 +1,10 @@
 https://www.orlandosentinel.com/arcio/rss/category/business/?sort=display_date:desc
 https://www.orlandosentinel.com/arcio/rss/category/travel/?sort=display_date:desc
 https://www.orlandoweekly.com/orlando/Rss.xml
+https://www.cbc.ca/cmlink/rss-topstories
+https://www.cbc.ca/cmlink/rss-canada-britishcolumbia
+https://www.cbc.ca/cmlink/rss-offbeat
+https://www.cbc.ca/cmlink/rss-canada
 https://chaski.huffpost.com/us/auto
 https://www.local10.com/arc/outboundfeeds/rss/category/news/?outputType=xml&size=10
 https://www.local10.com/arc/outboundfeeds/rss/category/entertainment/?outputType=xml&size=10
@@ -24,4 +28,3 @@ https://www.theguardian.com/us-news/rss
 https://www.theatlantic.com/feed/all/
 https://feeds.washingtonpost.com/rss/rss_morning-mix?itid=lk_inline_manual_35
 https://www.themeparkinsider.com/news/rss.xml
-

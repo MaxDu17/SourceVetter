@@ -2,3 +2,5 @@ http://export.arxiv.org/rss/cs.AI
 http://export.arxiv.org/rss/cs.CV/
 http://export.arxiv.org/rss/cs.LG/
 http://export.arxiv.org/rss/cs.RO/
+https://www.deepmind.com/publications/rss.xml
+https://openai.com/feed.xml?format=xml

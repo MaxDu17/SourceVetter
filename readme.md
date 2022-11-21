@@ -1,3 +1,7 @@
+# Ongoing developments
+* Create database perusal script (in addition to dumping)
+* Twitter live monitoring 
+
 # What is this?
 As a reseacher, I often need to keep up with current events! This means looking at arXiv feeds for my robotics research, and a whole ton of specialty sites & national news for my whale book. 
 I find this information gathering process rather tedious, so I made this web scraper that does a coarse read of most relevant data streams and gives you a digest of what's happening.
