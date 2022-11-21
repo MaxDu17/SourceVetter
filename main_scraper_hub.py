@@ -15,6 +15,7 @@ from extraction_engines.NewYorkerFiction import NewYorkerFiction
 from extraction_engines.BehindTheThrills import BehindThrills
 from extraction_engines.Twitter import TwitterSweep
 from extraction_engines.NonHumanRights import NonHumanRightsBlog
+from extraction_engines.InsideTheMagic import InsideMagic
 
 PAUSE = 3600
 YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
@@ -32,7 +33,7 @@ DP_Reader = DolphinProject() # don't include a keyword file to get all results
 NewYorkerFiction_Reader = NewYorkerFiction()
 BehindThrills_Reader = BehindThrills("streams/keyword.txt")
 NonHumanRights_Reader = NonHumanRightsBlog() # don't include a keyword file to get all results
-
+InsideMagic_Reader = InsideMagic("streams/keyword.txt")
 
 source_dict = {"news_articles" : RSS_Reader, "cs_arxiv" : CS_RSS_Reader,
                               "youtube_videos": YouTube_Reader,
@@ -42,7 +43,8 @@ source_dict = {"news_articles" : RSS_Reader, "cs_arxiv" : CS_RSS_Reader,
                               "DolphinProject": DP_Reader,
                               "New_Yorker_Fiction": NewYorkerFiction_Reader,
                               "Behind_Thrills" : BehindThrills_Reader,
-                              "Non_Human_Rights" : NonHumanRights_Reader
+                              "Non_Human_Rights" : NonHumanRights_Reader,
+                              "Inside_The_Magic" : InsideMagic_Reader
             }
 
 master_dataset = SQLDatabase("logs/database.db", tables = source_dict.keys()) # Database(50)
