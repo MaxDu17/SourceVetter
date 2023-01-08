@@ -64,10 +64,19 @@ while True:
             continue
 
         if reader is not None:
-            url_dict = reader.grab_relevant_links()
-            num_new_articles = master_dataset.update(url_dict, key)
-            print(f"{num_new_articles} proposed new elements of type {key}")
-            total_items += num_new_articles
+            try:
+                url_dict = reader.grab_relevant_links()
+                num_new_articles = master_dataset.update(url_dict, key)
+                print(f"{num_new_articles} proposed new elements of type {key}")
+                total_items += num_new_articles
+            except:
+                print("Error with source ", key)
+                notification.notify(
+                    title='Current Event Monitor',
+                    message=f"Error with source {key}.",
+                    app_icon=None,
+                    timeout=10,
+                )
 
     if total_items > 0:
         notification.notify(
