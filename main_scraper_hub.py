@@ -20,11 +20,11 @@ from extraction_engines.InsideTheMagic import InsideMagic
 PAUSE = 3600
 YOUTUBE_SKIP = 6 #every six iterations do youtube due to the quota
 
-CS_RSS_Reader = RSSReader("streams/keyword_CS.txt", "streams/rss_list_CS.txt")
+# CS_RSS_Reader = RSSReader("streams/keyword_CS.txt", "streams/rss_list_CS.txt")
 RSS_Reader = RSSReader("streams/keyword.txt", "streams/rss_list.txt")
 
 YouTube_Reader = YouTubeChannelSweep("streams/keyword.txt", "streams/youtube.txt")
-Twitter_Reader = TwitterSweep("streams/keyword.txt", "streams/twitter.txt")
+# Twitter_Reader = TwitterSweep("streams/keyword.txt", "streams/twitter.txt")
 
 # special interest
 PETA_Reader = PETA_Media_News_Releases("streams/keyword.txt")
@@ -35,13 +35,14 @@ BehindThrills_Reader = BehindThrills("streams/keyword.txt")
 NonHumanRights_Reader = NonHumanRightsBlog() # don't include a keyword file to get all results
 InsideMagic_Reader = InsideMagic("streams/keyword.txt")
 
-source_dict = {"news_articles" : RSS_Reader, "cs_arxiv" : CS_RSS_Reader,
+source_dict = {"news_articles" : RSS_Reader,
+                            # "cs_arxiv" : CS_RSS_Reader,
                               "youtube_videos": YouTube_Reader,
-                              "twitter": Twitter_Reader,
+                              # "twitter": Twitter_Reader,
                               "PETA" : PETA_Reader ,
                               "DODO": DODO_Reader,
                               "DolphinProject": DP_Reader,
-                              "New_Yorker_Fiction": NewYorkerFiction_Reader,
+                              # "New_Yorker_Fiction": NewYorkerFiction_Reader,
                               "Behind_Thrills" : BehindThrills_Reader,
                               "Non_Human_Rights" : NonHumanRights_Reader,
                               "Inside_The_Magic" : InsideMagic_Reader
@@ -79,9 +80,11 @@ while True:
                 )
 
     if total_items > 0:
+        undigested = master_dataset.get_digest()
+        all_total = sum([len(collection) for key, collection in undigested.items()])
         notification.notify(
             title='Current Event Monitor',
-            message=f"This hour, there were {total_items} detected! Run the digest reader for more info.",
+            message=f"This hour, there were {total_items} detected! You have {all_total} undigested items in your database",
             app_icon=None,
             timeout=10,
         )
